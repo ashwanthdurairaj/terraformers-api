@@ -1,0 +1,10 @@
+{
+    "version": 2,
+    "name": "terraformers",
+    "builds": [
+       { "src": "backend/server.js", "use": "@vercel/node" }
+    ],
+    "routes": [
+       { "src": "/(.*)", "dest": "/server.js" }
+    ]
+ }
