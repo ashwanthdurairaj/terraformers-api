@@ -145,7 +145,7 @@ const clashChecker = (start1, end1, start2, end2) => {
     hours4 = hours4 + 24
    }
 
-   if((hours1 < hours3 || hours3 < hours1) && (hours2 < hours3) || (hours2 < hours2) && (hours3 < hours2))
+   if(((hours1 < hours3) && (hours2 < hours3)) || ((hours1 > hours4) && (hours2 > hours4)))
    {
     return false
    }
