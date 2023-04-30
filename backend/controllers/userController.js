@@ -130,30 +130,29 @@ const generateToken = (id) => {
 }
 
 const clashChecker = (start1, end1, start2, end2) => {
-  let start1Minutes, end1Minutes = convertToMinutes(start1, end1);
-  let start2Minutes, end2Minutes = convertToMinutes(start2, end2);
+   let [hours1, minutes1] = start1.split(":")
+   let [hours2, minutes2] = end1.split(":")
+   let [hours3, minutes3] = start2.split(":")
+   let [hours4, minutes4] = end2.split(":")
 
-  // Check for overlap
-  if ((start1Minutes <= start2Minutes && start2Minutes < end1Minutes) ||
-      (start2Minutes <= start1Minutes && start1Minutes < end2Minutes)) {
-    return true; // There is a clash
-  } else {
-    return false; // There is no clash
-  }
-}
+   if(hours1 > hours2)
+   {
+      hours2 = hours2 + 24
+   }
 
-const convertToMinutes= (timeString1, timeString2) => {
-  const [hours1, minutes1] = timeString1.split(':');
-  const [hours2, minutes2] = timeString2.split(':');
-  console.log(hours1, hours2)
-  if(hours1 > hours2)
-  {
-    return parseInt(hours1) * 60 + parseInt(minutes1),parseInt(hours2 + 24) * 60 + parseInt(minutes2)
-  }
-  else
-  {
-    return parseInt(hours1) * 60 + parseInt(minutes1),parseInt(hours2) * 60 + parseInt(minutes2);
-  }
+   if(hours3 > hours4)
+   {
+    hours4 = hours4 + 24
+   }
+
+   if(hours1 < hours3 && hours2 < hours3)
+   {
+    return false
+   }
+   else
+   {
+    return true
+   }
 }
 
 const appointment = asyncHandler(async(req, res) => {
@@ -173,46 +172,34 @@ const appointment = asyncHandler(async(req, res) => {
   const result1 = clashChecker(req.body.startTime, req.body.endTime, Guest[0].startTime, Guest[0].endTime)
   console.log(result1)
 
-  // check whether appointment clashes with off time of user itself
-  const result2 = clashChecker(req.body.startTime, req.body.endTime, user[0].startTime, user[0].endTime)
-  console.log(result2)
-  //check whether appointment clashes with other appointments of the guest
-  let result3
-  for(let i = 0; i < guestAppointments.length; i++)
-  {
-    if(!clashChecker(req.body.startTime, req.body.endTime, guestAppointments[i].startTime, guestAppointments[i].endTime))
-    {
-      result3 = true
-      break
-    }
-  }
-  //check whether appointment clashes with other appointments of the user
-  let result4
-  for(let i = 0; i < guestAppointments.length; i++)
-  {
-    if(!clashChecker(req.body.startTime, req.body.endTime, userAppointments[i].startTime, userAppointments[i].endTime))
-    {
-      result4 = true
-      break
-    }
-  }
-  console.log(result3)
-  console.log(result4)
+  // // check whether appointment clashes with off time of user itself
+  // const result2 = clashChecker(req.body.startTime, req.body.endTime, user[0].startTime, user[0].endTime)
+  // console.log(result2)
+  // //check whether appointment clashes with other appointments of the guest
+  // let result3
+  // for(let i = 0; i < guestAppointments.length; i++)
+  // {
+  //   if(!clashChecker(req.body.startTime, req.body.endTime, guestAppointments[i].startTime, guestAppointments[i].endTime))
+  //   {
+  //     result3 = true
+  //     break
+  //   }
+  // }
+  // //check whether appointment clashes with other appointments of the user
+  // let result4
+  // for(let i = 0; i < guestAppointments.length; i++)
+  // {
+  //   if(!clashChecker(req.body.startTime, req.body.endTime, userAppointments[i].startTime, userAppointments[i].endTime))
+  //   {
+  //     result4 = true
+  //     break
+  //   }
+  // }
+  // console.log(result3)
+  // console.log(result4)
   if(result1)
   {
     res.json({message: 'appointment clashes with off time of guest'})
-  }
-  else if(result2)
-  {
-    res.json({message: 'appointment clashes with off time of yours'})
-  }
-  else if(result3)
-  {
-    res.json({message: 'appointment clashes with other appointments of the guest'})
-  }
-  else if(result4)
-  {
-    res.json({message: 'appointment clashes with other appointments of yours'})
   }
   else
   {
