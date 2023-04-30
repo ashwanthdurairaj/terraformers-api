@@ -172,34 +172,49 @@ const appointment = asyncHandler(async(req, res) => {
   const result1 = clashChecker(req.body.startTime, req.body.endTime, Guest[0].startTime, Guest[0].endTime)
   console.log(result1)
 
-  // // check whether appointment clashes with off time of user itself
-  // const result2 = clashChecker(req.body.startTime, req.body.endTime, user[0].startTime, user[0].endTime)
-  // console.log(result2)
-  // //check whether appointment clashes with other appointments of the guest
-  // let result3
-  // for(let i = 0; i < guestAppointments.length; i++)
-  // {
-  //   if(!clashChecker(req.body.startTime, req.body.endTime, guestAppointments[i].startTime, guestAppointments[i].endTime))
-  //   {
-  //     result3 = true
-  //     break
-  //   }
-  // }
-  // //check whether appointment clashes with other appointments of the user
-  // let result4
-  // for(let i = 0; i < guestAppointments.length; i++)
-  // {
-  //   if(!clashChecker(req.body.startTime, req.body.endTime, userAppointments[i].startTime, userAppointments[i].endTime))
-  //   {
-  //     result4 = true
-  //     break
-  //   }
-  // }
-  // console.log(result3)
-  // console.log(result4)
+  // check whether appointment clashes with off time of user itself
+  const result2 = clashChecker(req.body.startTime, req.body.endTime, user[0].startTime, user[0].endTime)
+  console.log(result2)
+  //check whether appointment clashes with other appointments of the guest
+  let result3
+  for(let i = 0; i < guestAppointments.length; i++)
+  {
+    if(!clashChecker(req.body.startTime, req.body.endTime, guestAppointments[i].startTime, guestAppointments[i].endTime))
+    {
+      result3 = true
+      break
+    }
+  }
+  //check whether appointment clashes with other appointments of the user
+  let result4
+  for(let i = 0; i < guestAppointments.length; i++)
+  {
+    if(!clashChecker(req.body.startTime, req.body.endTime, userAppointments[i].startTime, userAppointments[i].endTime))
+    {
+      result4 = true
+      break
+    }
+  }
+  console.log(result3)
+  console.log(result4)
   if(result1)
   {
     res.json({message: 'appointment clashes with off time of guest'})
+  }
+  else if(result2)
+  {
+    res.json({message: 'appointment clashes with off time of yourself'})
+
+  }
+  else if(result3)
+  {
+    res.json({message: 'appointment clashes with other appointments of guest'})
+
+  }
+  else if(result4)
+  {
+    res.json({message: 'appointment clashes with other appointments of yours'})
+
   }
   else
   {
@@ -242,8 +257,8 @@ const edit = asyncHandler(async(req, res) => {
 
 const getApp = asyncHandler(async(req, res) => {
   console.log(req.user)
-  const apps1 = await Appointment.find({user: req.user._id})
-  const apps2 = await Appointment.find({guest: req.user._id})
+  let apps1 = await Appointment.find({user: req.user._id})
+  let apps2 = await Appointment.find({guest: req.user._id})
   res.status(200).json(apps1.concat(apps2))
 })
 
