@@ -256,7 +256,7 @@ const edit = asyncHandler(async(req, res) => {
 const getApp = asyncHandler(async(req, res) => {
   console.log(req.user)
   const apps1 = await Appointment.find({user: req.user._id})
-  const apps2 = await Appointment.find({guest})
+  const apps2 = await Appointment.find({guest: req.user._id})
   res.status(200).json(apps1 + apps2)
 })
 
