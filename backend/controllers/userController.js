@@ -129,31 +129,30 @@ const generateToken = (id) => {
   })
 }
 
+
 const clashChecker = (start1, end1, start2, end2) => {
-   let [hours1, minutes1] = start1.split(":")
-   let [hours2, minutes2] = end1.split(":")
-   let [hours3, minutes3] = start2.split(":")
-   let [hours4, minutes4] = end2.split(":")
-
-   if(hours1 > hours2)
-   {
-      hours2 = hours2 + 24
-   }
-
-   if(hours3 > hours4)
-   {
-    hours4 = hours4 + 24
-   }
-
-   if(((hours1 < hours3) && (hours2 < hours3)) || ((hours1 > hours4) && (hours2 > hours4)))
-   {
-    return false
-   }
-   else
-   {
-    return true
-   }
-}
+  function checkTimeClash(start1, end1, start2, end2) {
+    // Convert time strings to minutes since midnight
+    const start1Minutes = convertToMinutes(start1);
+    const end1Minutes = convertToMinutes(end1);
+    const start2Minutes = convertToMinutes(start2);
+    const end2Minutes = convertToMinutes(end2);
+  
+    // Check for overlap
+    if ((start1Minutes <= start2Minutes && start2Minutes < end1Minutes) ||
+        (start2Minutes <= start1Minutes && start1Minutes < end2Minutes)) {
+      return true; // There is a clash
+    } else {
+      return false; // There is no clash
+    }
+  }
+  
+  // Helper function to convert time strings to minutes since midnight
+  function convertToMinutes(timeString) {
+    const [hours, minutes] = timeString.split(':');
+    return parseInt(hours) * 60 + parseInt(minutes);
+  }
+  }
 
 const appointment = asyncHandler(async(req, res) => {
   const {title, agenda, startTime, endTime, guest, id} = req.body
