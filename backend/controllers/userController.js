@@ -107,7 +107,7 @@ const loginUser = asyncHandler(async (req, res) => {
         email: user.email,  
       }    })
   } else {
-    res.status(400).json({message: 'Invalid Credentials'})
+    res.json({message: 'Invalid Credentials'})
     // throw new Error('Invalid credentials')
   }
 })
