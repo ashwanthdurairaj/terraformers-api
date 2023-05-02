@@ -17,6 +17,10 @@ const appointmentSchema = mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
     },
+    userEmail: {
+      type: String,
+    },
+    guestEmail: { type: String},
     startTime:{
         type: String,
         required: [true, 'Please add start time'],

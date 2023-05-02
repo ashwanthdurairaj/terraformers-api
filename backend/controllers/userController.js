@@ -222,6 +222,8 @@ const appointment = asyncHandler(async(req, res) => {
       agenda,
       guest:Guest[0]._id,
       user: req.body.id,
+      userEmail: user[0].email,
+      guestEmail: guest,     
       startTime,
       endTime
       })
