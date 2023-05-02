@@ -99,6 +99,7 @@ const loginUser = asyncHandler(async (req, res) => {
   console.log(password)
   if (user && password == user.password) {
     res.json({
+      message: 'success',
       token: generateToken(user._id),
       user: {
         _id: user.id,
@@ -106,8 +107,8 @@ const loginUser = asyncHandler(async (req, res) => {
         email: user.email,  
       }    })
   } else {
-    res.status(400)
-    throw new Error('Invalid credentials')
+    res.status(400).json({message: 'Invalid Credentials'})
+    // throw new Error('Invalid credentials')
   }
 })
 
